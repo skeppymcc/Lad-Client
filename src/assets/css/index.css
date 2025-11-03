@@ -1,0 +1,118 @@
+@import "font.css";
+@import 'theme.css';
+
+/* contenedor general */
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../images/background/dark/2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: var(--background);
+    font-family: "Poppins", sans-serif;
+    color: var(--color);
+    overflow: hidden;
+}
+
+/* caja del splash (centrada y responsiva) */
+#splash {
+    width: 420px;         /* ancho del contenido (ajustable) */
+    max-width: 90%;
+    text-align: center;
+    pointer-events: none; /* evita clicks sobre el splash si no hace nada */
+}
+
+/* logo */
+.splash {
+    display: block;
+    margin: 0 auto 18px;
+    width: 220px;         /* logo mÃ¡s grande */
+    height: auto;
+    transition: opacity .35s ease, transform .35s ease;
+    opacity: 0;
+    transform: translateY(-8px);
+}
+
+/* estado visible */
+#splash.visible .splash {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* mensaje principal */
+.splash-message {
+    font: bold 22px/28px Poppins;
+    margin: 0 0 8px;
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+/* autor (pequeÃ±o) */
+.splash-author {
+    font: normal 11px/14px Poppins;
+    margin: 2px 0 8px;
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.splash-author .author {
+    font-weight: 700;
+}
+
+/* mensaje secundario */
+.message {
+    font: bold 18px/26px Poppins;
+    margin: 0 0 14px;
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+/* al mostrar todo */
+#splash.visible .splash-message,
+#splash.visible .splash-author,
+#splash.visible .message {
+    opacity: 1;
+}
+
+/* progress bar */
+.progress {
+    width: 100%;
+    height: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+/* mostrar la barra */
+#splash.visible .progress,
+.progress.show {
+    opacity: 1;
+}
+
+/* estilos del progress (webkit) */
+.progress::-webkit-progress-bar {
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid var(--element-color);
+    border-radius: 10px;
+}
+
+.progress::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--element-color), #ffffff);
+    border-radius: 10px;
+    transition: width 0.2s ease; /* animaciÃ³n suave al actualizar */
+}
+
+/* estilos para Firefox (fallback) */
+.progress::-moz-progress-bar {
+    background: linear-gradient(90deg, var(--element-color), #ffffff);
+    border-radius: 10px;
+    transition: width 0.2s ease;
+}

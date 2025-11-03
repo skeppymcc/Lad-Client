@@ -1,0 +1,24 @@
+.global {
+    --element-color: #868686cf;
+    --transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    --dark-color: #292929;
+    --light-color: #232323;
+}
+
+.dark {
+    --color: #ffffff;
+    --background: #44444489;
+    --background-element: #7272727b;
+    --background-transparent: #23232300;
+    --shadow: #464646b3;
+    --svg-color: brightness(0) saturate(100%) invert(1%) sepia(55%) saturate(23%) hue-rotate(236deg) brightness(108%) contrast(92%);
+}
+
+.light {
+    --color: #ffffff;
+    --background: #44444489;
+    --background-element: #7272727b;
+    --background-transparent: #44444448;
+    --shadow: #464646b3;
+    --svg-color: brightness(0) saturate(100%) invert(100%) sepia(5%) saturate(1719%) hue-rotate(357deg) brightness(94%) contrast(84%);
+}

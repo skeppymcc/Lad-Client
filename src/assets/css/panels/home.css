@@ -1,0 +1,2198 @@
+* {
+    --icon-unselected: #707070;
+    --box: #1A1A1A;
+    --box-hover: #202020;
+    --box-button: #ffc402;
+    --box-button-hover: #053e8a;
+    --box-button-hover-2: #001f47;
+    --box-button-gradient-1: 	#00FFFF;
+    --box-button-gradient-2: 	#0096FF;
+}
+
+/* Importar fuente moderna para mejorar tipografía */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+.home {
+	position: relative; /* necesario para pseudo-elementos */
+	/* variables por defecto (pueden sobrescribirse desde JS) */
+	--home-bg-front: var(--home-bg, none);
+	--home-bg-back: none;
+}
+
+.home .container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Status server                                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.status-server {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25rem;
+    height: 4rem; /* un poco más alto para el título */
+    border-radius: 10px;
+    margin-top: 3rem;
+    padding: 0.6rem 1rem;
+    text-align: center;
+    background-color: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    transition: all 0.2s;
+    background: rgba(0, 146, 230, 0);
+    -webkit-backdrop-filter: blur( 8px );
+}
+
+.server-status-icon {
+    height: 3.3rem;
+    border-radius: 15px;
+}
+
+.server-status-name {
+    font-size: 1.6rem; /* grande y legible */
+    font-weight: 700;
+    color: var(--color);
+    text-align: center;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Mantener visibles para accesibilidad si es necesario, pero por defecto ocultos */
+.server-status-text {
+    display: none;
+}
+
+/* Ocultamos contador pequeño pero lo dejamos en DOM para compatibilidad JS */
+.status-player-count {
+    display: none;
+}
+
+/* Si quieres mostrar la subinfo en pantallas grandes, se podría reactivar con media queries */
+@media (min-width: 1400px) {
+    /* ejemplo: mostrar texto secundario en pantallas muy amplias */
+    /* .server-status-text { display: block; font-size: 0.8rem; color: #a8a8a8; } */
+}
+
+.home-bottom {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 80px - 8rem);
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * news server                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.new-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%; /* Más ancho para centrar y dar más espacio */
+    margin: 0 auto; /* Centrado horizontal */
+    height: 100%;
+    max-height: 600px; /* Altura máxima fija para el área de news */
+    min-height: 400px; /* Altura mínima opcional para mantener tamaño */
+    box-sizing: border-box;
+}
+
+.titre-tab-new {
+    margin-top: 1rem;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    background: var(--background-transparent);
+    color: var(--color);
+}
+
+.news-list {
+    position: relative;
+    width: 100%; /* Aprovecha todo el ancho del contenedor */
+    height: 100%;
+    border-radius: 10px;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra las news */
+    overflow-y: auto; /* Scroll interno si hay muchas news */
+    position: relative;
+    height: 160px; /* Altura de una sola news-block (ajusta según tu diseño) */
+    max-height: 160px;
+    overflow: visible;
+    /* Elimina el scroll interno */
+}
+
+.news-block {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 520px;
+    min-width: 520px;
+    max-width: 520px;
+    min-height: 120px;
+    max-height: 160px;
+    margin: 0 auto 0.7rem auto;
+    border-radius: 10px;
+    background: rgba(30, 30, 30, 0.32); /* más transparente */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.13);
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+    transition:
+        opacity 0.35s cubic-bezier(.4,2.2,.2,1),
+        filter 0.35s cubic-bezier(.4,2.2,.2,1),
+        transform 0.45s cubic-bezier(.4,2.2,.2,1);
+}
+
+/* Media (izquierda) */
+.news-block-media {
+    flex: 0 0 38%;
+    min-width: 38%;
+    max-width: 38%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #181818;
+    overflow: hidden;
+    border-right: 1px solid rgba(255,255,255,0.07);
+}
+.news-block-media img,
+.news-block-media video,
+.news-block-media iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    display: block;
+    background: #181818;
+}
+
+/* Info (derecha) */
+.news-block-info {
+    flex: 1 1 62%;
+    min-width: 0;
+    padding: 0.7rem 0.8rem 0.7rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: transparent;
+}
+
+.news-block-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.3rem;
+}
+
+.news-block-title {
+    font-family: 'Minecraftia', 'Montserrat', 'Arial Black', Arial, sans-serif;
+    font-size: 1.05rem;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px #000a;
+    line-height: 1.1;
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-block-date-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.7rem;
+}
+
+.news-block-date-label {
+    font-size: 0.75rem;
+    background: #222;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 1px 7px;
+    margin-right: 0.4em;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+}
+
+.news-block-date {
+    font-size: 0.82rem;
+    color: #e0e0e0;
+    font-weight: 400;
+    opacity: 0.95;
+}
+
+.news-block-content {
+    font-size: 0.93rem;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 0.5rem; /* Menos espacio abajo para subir el botón */
+    margin-top: 0.05rem;
+    line-height: 1.5;
+    text-shadow: 0 1px 2px #0007;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 8.5em;
+    white-space: normal; /* Permite varias líneas */
+}
+
+.news-block-btn-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0.1rem; /* Botón más arriba */
+}
+
+.news-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 1px;
+    background: #389c36;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s;
+    gap: 0.5em;
+    min-width: 116px;
+    height: 2em;
+    border: none;
+}
+.news-button:hover, .news-button:active {
+    background: #2e7d2e;
+    color: #fff;
+    box-shadow: none;
+    transform: none;
+}
+.news-button svg, .news-button .news-btn-icon {
+    margin-left: 0.5em;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    fill: #fff;
+}
+
+/* Estilos para el título del servidor: más grande y más estético */
+.server-title {
+    font-family: "Inter", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 2.1rem;             /* un poco más grande */
+    line-height: 1.05;
+    letter-spacing: 0.6px;         /* aire entre letras */
+    margin: 0.25rem 0;
+    padding: 0.2rem 0.6rem;
+    border-radius: 8px;
+    display: inline-block;
+    background: linear-gradient(90deg, #ffffff 0%, #d9f7ff 45%, #9be8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff; /* fallback */
+    text-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.02) inset;
+    transform-origin: left center;
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* Pequeña variación al pasar el ratón (opcional, elegante) */
+.server-title:hover {
+    transform: translateY(-2px) scale(1.01);
+    opacity: 0.98;
+}
+
+/* Ajuste en pantallas pequeñas */
+@media (max-width: 900px) {
+    .server-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.35px;
+    }
+}
+
+@media (max-width: 900px) {
+    .news-block {
+        width: 95vw;
+        min-width: 0;
+        max-width: 100vw;
+        min-height: 90px;
+        max-height: 120px;
+    }
+    .news-block-content {
+        max-height: 2em;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .news-block {
+        width: 98vw;
+        min-width: 0;
+        max-width: 100vw;
+        min-height: 70px;
+        max-height: 100px;
+    }
+    .news-block-media {
+        min-width: 35%;
+        max-width: 35%;
+    }
+    .news-block-info {
+        padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+    }
+    .news-block-title {
+        font-size: 0.93rem;
+    }
+    .news-block-content {
+        font-size: 0.8rem;
+        max-height: 1.5em;
+    }
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * social server                                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.social-tab {
+    position: fixed; /* fijo sobre la ventana */
+    bottom: 1.2rem;
+    left: calc(6rem + 1rem); /* evita solaparse con la sidebar2 (6rem) */
+    right: auto;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    z-index: 9998;
+    pointer-events: auto;
+    transition: transform 160ms ease, opacity 160ms ease;
+}
+
+/* Lista ahora HORIZONTAL y compacta */
+.social-list {
+    display: flex;
+    flex-direction: row; /* <-- horizontal */
+    gap: 0.45rem;
+    padding: 0.15rem;
+    background: transparent;
+    border-radius: 12px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* Botones pequeños, redondeados y minimalistas */
+.social-block {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms, background 160ms;
+    user-select: none;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* Icono reducido dentro del botón */
+.social-block .icon-social {
+    pointer-events: none;
+    background-repeat: no-repeat;
+    width: 60%;
+    height: 60%;
+    background-size: contain;
+    background-position: center;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.38));
+}
+
+/* Hover: ligero pop y brillo */
+.social-block:hover {
+    transform: translateY(-3px) scale(1.06);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.42);
+}
+
+/* Active (clic) */
+.social-block:active {
+    transform: translateY(-1px) scale(0.995);
+}
+
+/* Pequeñas variantes por brand para conservar identidad pero suavizadas */
+.social-block[data-brand="discord"] {
+    background: linear-gradient(180deg, rgba(88,101,242,0.12), rgba(88,101,242,0.06));
+    border-color: rgba(88,101,242,0.18);
+}
+.social-block[data-brand="web"] {
+    background: linear-gradient(180deg, rgba(0,150,200,0.10), rgba(0,150,200,0.05));
+    border-color: rgba(0,150,200,0.14);
+}
+.social-block[data-brand="youtube"] {
+    background: linear-gradient(180deg, rgba(255,0,0,0.10), rgba(255,0,0,0.05));
+    border-color: rgba(255,0,0,0.14);
+}
+
+/* Focus accesible */
+.social-block:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(100,180,255,0.12), 0 8px 20px rgba(0,0,0,0.35);
+    transform: translateY(-3px) scale(1.06);
+}
+
+/* Override: desactivar animaciones/transformaciones para la sección social */
+.social-tab,
+.social-list,
+.social-block,
+.social-block .icon-social {
+	transition: none !important;
+	-webkit-transition: none !important;
+	animation: none !important;
+	-webkit-animation: none !important;
+}
+
+.social-block,
+.social-block[data-brand="discord"],
+.social-block[data-brand="web"],
+.social-block[data-brand="youtube"] {
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	transform: none !important;
+	-webkit-transform: none !important;
+}
+
+/* Hover / active / focus estáticos: mantener colores pero sin movimiento ni sombreado */
+.social-block:hover,
+.social-block:active,
+.social-block:focus {
+	transform: none !important;
+	box-shadow: none !important;
+	-webkit-transform: none !important;
+	-webkit-box-shadow: none !important;
+}
+
+/* Mantener foco accesible sin animaciones (sólo un anillo estático) */
+.social-block:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(100,180,255,0.12) !important;
+	/* sin transformaciones ni animaciones */
+	transition: none !important;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * sidebar                                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.sidebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    background: var(#2c2c2c00);
+}
+
+.sidebar2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 6rem;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #2b2b2b; /* fondo gris sólido */
+    background: linear-gradient(180deg, #2b2b2b 0%, #262626 100%);
+    border-right: 1px solid rgba(255,255,255,0.03);
+    box-shadow: none;
+    backdrop-filter: none;
+    transition: all 0.2s;
+    background: rgba(0, 146, 230, 0.062);
+    border-radius: 0 10px 10px 0;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(5px);
+    gap: 1rem;
+}
+
+.player-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    height: 3rem;
+    margin: 1.5rem 0;
+}
+
+.player-head {
+    background: url('../../images/default/setve.png'), no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+    transition: var(--transition);
+    height: 3rem;
+    width: 3rem;
+    pointer-events: none;
+    border-radius: 0px;
+    margin: 0;
+}
+.head-frame,
+.player-head {
+    box-sizing: border-box;
+}
+
+.player-menu {
+    color: var(--element-color);
+    transform: rotate(270deg);
+    pointer-events: none;
+}
+
+.play-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2.5rem 2.5rem;
+    margin-top: 0rem;
+}
+
+.play-instance2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-color: var(--box-button);
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 25px;
+    color: var(--icon-unselected);
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.05s, background-color 0.2s, background-image 0.2s, top 0.2s, left 0.2s, height 0.2s, opacity 0.2s, margin 0.2s;
+    height: 3.2rem;
+    padding-right: 2rem;
+}
+.play-instance2:hover {
+    color: var(--icon-hover);
+    background-color: var(--box-button-hover);
+}
+
+.play-instance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background: rgba(20, 30, 60, 0.22);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.08);
+    border-radius: 12px;
+    border: 1.5px solid rgba(80,255,180,0.09);
+    color: var(--icon-unselected);
+    cursor: pointer;
+    z-index: 2;
+    transition: 
+        color 0.05s, 
+        background 0.22s, 
+        box-shadow 0.22s, 
+        border 0.22s, 
+        height 0.2s, 
+        opacity 0.2s, 
+        margin 0.2s;
+    height: 3.1rem;
+    padding-right: 0rem;
+    right: 12px;
+    top: -6px;
+}
+
+.play-instance:hover,
+.play-instance:focus,
+.play-instance.active {
+    background: rgba(20, 40, 90, 0.38);
+    box-shadow: 0 6px 36px 0 rgba(80,255,180,0.13);
+    border: 1.5px solid #4be6a7;
+    color: #b7ffe0;
+}
+
+.play-btn {
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    color: var(--color);
+    font-size: 2rem;
+    font-weight: bolder;
+    padding: 0 1.5rem;
+    pointer-events: none;
+}
+
+.instance-select {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    background: rgba(20, 30, 60, 0.22);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.08);
+    border-radius: 12px;
+    border: 1.5px solid rgba(80,255,180,0.09);
+    color: #ffffff;
+    font-size: 1rem;
+    height: calc(100% - -1px);
+    text-align: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    right: 175px;
+    top: -1px;
+    transition: 
+        color 0.05s, 
+        background 0.22s, 
+        box-shadow 0.22s, 
+        border 0.22s, 
+        height 0.2s, 
+        opacity 0.2s, 
+        margin 0.2s;
+}
+
+.play-instance {
+    background: rgba(20, 30, 60, 0.22);
+}
+.instance-select {
+    background: rgba(20, 30, 60, 0.22);
+}
+
+.play-instance:hover:not(:has(.instance-select:hover, .instance-select:focus, .instance-select.active)),
+.play-instance:focus-within:not(:has(.instance-select:hover, .instance-select:focus, .instance-select.active)),
+.play-instance.active:not(:has(.instance-select:hover, .instance-select:focus, .instance-select.active)) {
+    background: rgba(20, 40, 90, 0.38);
+    box-shadow: 0 6px 36px 0 rgba(80,255,180,0.13);
+    border: 1.5px solid #4be6a7;
+    color: #b7ffe0;
+}
+
+/* Hover/focus/active SOLO sobre .instance-select */
+.instance-select:hover,
+.instance-select:focus,
+.instance-select.active {
+    background: rgba(20, 40, 90, 0.38);
+    box-shadow: 0 6px 36px 0 rgba(80,255,180,0.13);
+    border: 1.5px solid #4be6a7;
+    color: #b7ffe0;
+}
+
+/* Cuando ambos están en hover/focus, solo ilumina el que tiene el mouse/focus */
+.play-instance:hover:has(.instance-select:hover),
+.play-instance:focus-within:has(.instance-select:focus),
+.play-instance.active:has(.instance-select.active) {
+    background: rgba(20, 30, 60, 0.22);
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.08);
+    border: 1.5px solid rgba(80,255,180,0.09);
+    color: var(--icon-unselected);
+}
+
+.icon-speaker-on {
+    background-image: url('../../images/logo/speaker-on.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.2s;
+}
+
+.icon-speaker-off {
+    background-image: url('../../images/logo/speaker-off.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.2s;
+}
+
+.icon-speaker-on:hover,
+.icon-speaker-off:hover {
+    filter: brightness(50%);
+}
+
+.info-starting-game {
+    display: none;
+    text-align: center;
+    background: rgba(0, 146, 230, 0.062);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(15.5px);
+    transition: all 0.2s, border 0.2s;
+    padding: 0.5rem;
+}
+
+.progress-bar {
+    appearance: none;
+    height: 10px;
+    margin: 0.5rem 0;
+    width: 15rem;
+}
+
+.progress-bar::-webkit-progress-bar {
+    background: rgba( 0, 0, 0, 0.25 );
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    backdrop-filter: blur( 8px );
+    -webkit-backdrop-filter: blur( 5px );
+}
+
+.progress-bar::-webkit-progress-value {
+    background-color: var(--element-color);
+    border-radius: 10px;
+}
+
+.mods-btn, .settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+    font-size: 2rem;
+    pointer-events: none;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 1rem;
+    height: 3.1rem;
+    width: 3.1rem;
+    cursor: pointer;
+    background: rgba(0, 146, 230, 0.062); /* igual que .icon-speaker-on/off */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(5px);
+    margin: 1.5rem 0;
+}
+
+.action-button:hover {
+    background: var(--box-button-hover-2);
+    transform: scale(1.05);
+}
+
+.action-button:hover .settings-btn {
+    animation: rotation 2s linear infinite;
+}
+
+.action-button-settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 1rem;
+    height: 3.1rem;
+    width: 3.1rem;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.05);
+    transition: background 0.2s, border 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(15.5px);
+    -webkit-backdrop-filter: blur(15.5px);
+    margin: 1.5rem 0;
+}
+
+.action-button-settings:hover {
+    background: var(--box-button-hover-2);
+    transform: scale(1.05);
+}
+
+.action-button-settings:hover .settings-btn,
+.action-button-settings:focus .settings-btn {
+    animation: spin-settings 1.2s linear infinite;
+}
+
+.blank-btn {
+    width: 3rem;
+    height: 3rem;
+    font-size: 3rem;
+    color: var(#0078bd00);
+    margin: 0 1.5rem;
+}
+
+.instance-popup {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    transition: all 0.5s;
+    background: rgba( 0, 0, 0, 0.05 );
+    backdrop-filter: blur( 5px );
+    -webkit-backdrop-filter: blur( 5px );
+}
+
+.instances-List-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 30rem;
+    padding-right: 8px; 
+    scrollbar-width: thin; 
+    scrollbar-color: white transparent;
+}
+
+.instances-List-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.instances-List-container::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0;
+}
+
+.instances-List-container::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 20px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    min-height: 50px;
+}
+
+/* Nuevo: bordes verdes o rojos según el estado */
+.instance-image.instance-online {
+    border: 3px solid #1AC707; /* verde */
+    box-shadow: 0 0 0 2px rgba(26,199,7,0.18);
+}
+.instance-image.instance-offline {
+    border: 3px solid #FF0409; /* rojo */
+    box-shadow: 0 0 0 2px rgba(255,4,9,0.18);
+}
+
+.instance-name {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.instance-mkid {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}
+
+.no-instances-message {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    grid-column: 1 / -1;
+}
+
+.no-instances-message p {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.no-instances-message p:first-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.instances-tab {
+    position: relative;
+    border-radius: 10px;
+    padding: 1rem 3rem;
+    transition: all 0.5s;
+    background-color: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    transition: all 0.2s;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.close-popup {
+    position: absolute;
+    display: flex;
+    top: 10px;
+    right: 10px;
+    background: var(--shadow);
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.instances-tab p {
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+.instance-elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, border 0.2s;
+    width: 250px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(15.5px);
+    -webkit-backdrop-filter: blur(15.5px);
+}
+
+.instance-elements:hover {
+    background: rgba(0, 120, 189, 0.2);
+    border: 1px solid rgba(0, 120, 189, 0.3);
+}
+
+.active-instance {
+    background: rgba(0, 120, 189, 0.4);
+    border: 1px solid rgba(0, 120, 189, 0.3);
+}
+
+
+.head-frame {
+    position: relative;
+    overflow: hidden;
+    height: 3.3rem;
+    width: 3.3rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.head-frame::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.head-frame.border-animation::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: linear-gradient(90deg, 
+        rgb(255, 0, 0), 
+        rgb(255, 127, 0), 
+        rgb(255, 255, 0), 
+        rgb(127, 255, 0), 
+        rgb(0, 255, 0), 
+        rgb(0, 255, 127), 
+        rgb(0, 255, 255), 
+        rgb(0, 127, 255), 
+        rgb(0, 0, 255), 
+        rgb(127, 0, 255), 
+        rgb(255, 0, 255), 
+        rgb(255, 0, 127));
+    background-size: 50% 50%;
+    animation: rotation 4s linear infinite;
+}
+
+.dragbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    z-index: 22222222222222222222;  /* Lower z-index to be below frame */
+    -webkit-app-region: drag;
+    pointer-events: auto;
+}
+
+.home {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.compact-session-info {
+    display: flex;
+    gap: 1.2rem;
+    margin: 0.5rem 0 0.5rem 1.5rem;
+    padding: 0.3rem 1rem;
+    background: rgb(0 0 0 / 0%);
+    border-radius: 8px;
+    align-items: center;
+    width: fit-content;
+    backdrop-filter: blur(2.5px);
+    font-size: 0.85rem;
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0%);
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.compact-session-info .session-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 90px;
+}
+
+.compact-session-info .session-info-title {
+    color: #ccc;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 500;
+}
+
+.compact-session-info .session-info-value {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.1rem;
+}
+
+.session-info-value#last-session {
+    letter-spacing: 1px;
+    min-width: 90px;
+    text-align: left;
+}
+
+/* Minimalist animated icon for session time */
+.session-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.2em;
+    vertical-align: middle;
+    position: relative;
+}
+.session-icon::before {
+    content: '';
+    display: block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid #ffc402;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin-session 1.2s linear infinite;
+    box-sizing: border-box;
+}
+@keyframes spin-session {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+.session-icon-img {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.3em;
+    vertical-align: middle;
+    object-fit: contain;
+}
+
+/* New styles for news media and buttons */
+.news-media {
+    margin-bottom: 1rem;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 200px; /* altura máxima para el media */
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.news-media img {
+    width: 100%;
+    object-fit: contain;
+    max-height: 200px; /* igual que el contenedor */
+    display: block;
+}
+
+.news-youtube {
+    position: relative;
+    padding-bottom: 56.25% /* 16:9 Aspect Ratio */;
+    height: 0;
+    overflow: hidden;
+    max-height: 200px; /* igual que news-media */
+}
+
+.news-youtube iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    max-height: 200px;
+}
+
+.news-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 1rem;
+    justify-content: flex-end;
+}
+
+.news-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 1px;
+    background: #389c36;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s;
+    gap: 0.5em;
+    min-width: 116px;
+}
+
+.news-button:hover, .news-button:active {
+    background: #2e7d2e;
+    color: #fff;
+    box-shadow: none;
+    transform: none;
+}
+
+.news-button svg, .news-button .news-btn-icon {
+    margin-left: 0.5em;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    fill: #fff;
+}
+
+/* Improve existing news styles */
+.news-content {
+    padding: 0.5rem 0;
+}
+
+.news-content .bbWrapper {
+    padding: 1rem 2rem;
+}
+
+/* Make news content and media responsive */
+@media (max-width: 768px) {
+    .news-media {
+        max-height: 120px;
+    }
+    .news-block {
+        width: 95%;
+        min-height: 220px;
+        max-height: 320px;
+    }
+    .news-youtube,
+    .news-youtube iframe {
+        max-height: 120px;
+    }
+}
+
+/* --- NEWS STACKED PREVIEW STYLE --- */
+.news-list {
+    position: relative;
+    height: 160px;
+    max-height: 160px;
+    overflow: visible;
+}
+
+.news-block:first-child {
+    position: relative;
+    z-index: 10;
+    opacity: 1;
+    pointer-events: auto;
+    filter: none;
+    transform: none;
+    transition:
+        opacity 0.7s cubic-bezier(.4,2.2,.2,1),
+        filter 0.7s cubic-bezier(.4,2.2,.2,1),
+        transform 0.7s cubic-bezier(.4,2.2,.2,1);
+}
+
+.news-block:nth-child(2) {
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 5;
+    top: 40px;
+    filter: blur(0.5px);
+    transform: scale(0.98) translateY(18px);
+    transition-delay: 0s;
+}
+
+.news-block:nth-child(3) {
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 4;
+    top: 70px;
+    filter: blur(1.2px);
+    transform: scale(0.96) translateY(36px);
+    transition-delay: 0s;
+}
+
+.news-block:nth-child(4) {
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 3;
+    top: 95px;
+    filter: blur(2px);
+    transform: scale(0.94) translateY(54px);
+    transition-delay: 0s;
+}
+
+.news-list:hover,
+.news-list:focus-within {
+    height: auto;
+    max-height: none;
+}
+
+.news-list:hover .news-block,
+.news-list:focus-within .news-block {
+    position: relative;
+    opacity: 1 !important;
+    pointer-events: auto;
+    z-index: unset;
+    top: unset;
+    margin-bottom: 0.7rem;
+    filter: none;
+    transform: scale(1) translateY(0);
+    transition:
+        opacity 0.7s cubic-bezier(.4,2.2,.2,1),
+        filter 0.7s cubic-bezier(.4,2.2,.2,1),
+        transform 0.7s cubic-bezier(.4,2.2,.2,1);
+}
+
+.notification-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    pointer-events: none;
+    align-items: flex-end;
+}
+
+.notification {
+    min-width: 240px;
+    max-width: 370px;
+    padding: 1em 1.5em 1em 1em;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 1.07rem;
+    font-weight: 500;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    border: 1.5px solid transparent;
+    position: relative;
+    transition: box-shadow 0.18s, background 0.18s, border 0.18s;
+    animation: notification-in 0.38s cubic-bezier(.4,2.2,.2,1);
+}
+
+.notification-success {
+    background: linear-gradient(90deg, #36b030 0%, #4be6a7 100%);
+    border-color: #36b030;
+}
+.notification-info {
+    background: linear-gradient(90deg, #0078bd 0%, #0096FF 100%);
+    border-color: #0078bd;
+}
+.notification-error {
+    background: linear-gradient(90deg, #ff4040 0%, #ff7a7a 100%);
+    border-color: #ff4040;
+}
+.notification-warn {
+    background: linear-gradient(90deg, #ffc402 0%, #ffe082 100%);
+    color: #222;
+    border-color: #ffc402;
+}
+
+.notification-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2em;
+    min-height: 2.2em;
+    margin-right: 0.5em;
+}
+.notification-icon {
+    width: 2em;
+    height: 2em;
+    display: block;
+}
+
+.notification-message {
+    flex: 1 1 auto;
+    word-break: break-word;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    padding-right: 0.5em;
+}
+
+.notification-close {
+    display: inline-block;
+    font-size: 1.3em;
+    color: #fff;
+    opacity: 0.7;
+    cursor: pointer;
+    margin-left: 0.5em;
+    transition: opacity 0.18s, color 0.18s;
+    font-weight: bold;
+    pointer-events: auto;
+    user-select: none;
+    background: none;
+    border: none;
+    outline: none;
+    line-height: 1;
+}
+.notification-close:hover {
+    opacity: 1;
+    color: #fff;
+}
+
+@keyframes notification-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+@keyframes notification-out {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.98);
+    }
+}
+.notification-animate-in {
+    animation: notification-in 0.38s cubic-bezier(.4,2.2,.2,1);
+}
+.notification-animate-out {
+    animation: notification-out 0.32s cubic-bezier(.4,2.2,.2,1) forwards;
+}
+
+.home .notification-container {
+    position: fixed;
+    top: 3.1rem;
+    right: 4.3rem;
+    left: auto;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none;
+    gap: 0.4rem;
+    width: auto;
+}
+
+.home .notification,
+.home .notification-mini {
+    min-width: 180px;
+    max-width: 260px;
+    padding: 0.45em 1em 0.45em 0.7em;
+    border-radius: 11px;
+    color: #fff;
+    font-size: 0.97rem;
+    font-weight: 600;
+    box-shadow: 0 4px 18px 0 rgba(0,0,0,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+    background: rgba(0, 255, 128, 0.13);
+    border: 2px solid rgba(0,255,128,0.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    position: relative;
+    transition: box-shadow 0.18s, background 0.18s, border 0.18s;
+    font-family: 'Poppins', Arial, sans-serif;
+    margin-bottom: 0;
+    animation: notification-in-img 0.33s cubic-bezier(.4,2.2,.2,1);
+}
+
+.home .notification-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5em;
+    min-height: 1.5em;
+    margin-right: 0.5em;
+}
+.home .notification-icon {
+    width: 1.1em;
+    height: 1.1em;
+    display: block;
+}
+
+.home .notification-message {
+    flex: 1 1 auto;
+    word-break: break-word;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    padding-right: 0.3em;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.97rem;
+}
+
+.home .notification-close {
+    display: none;
+}
+
+@keyframes notification-in-img {
+    0% {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+@keyframes notification-out-img {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.97) skewX(-6deg);
+    }
+}
+.home .notification-animate-in {
+    animation: notification-in-img 0.33s cubic-bezier(.4,2.2,.2,1);
+}
+.home .notification-animate-out {
+    animation: notification-out-img 0.28s cubic-bezier(.4,2.2,.2,1) forwards;
+}
+
+/* Apilado visual: las notificaciones se superponen un poco */
+.home .notification-container .notification:not(:last-child) {
+    margin-bottom: -0.5em;
+    filter: blur(0.5px) brightness(0.97);
+    opacity: 0.85;
+    z-index: 1;
+    scale: 0.97;
+    pointer-events: none;
+}
+.home .notification-container .notification:last-child {
+    filter: none;
+    opacity: 1;
+    z-index: 2;
+    scale: 1;
+    pointer-events: auto;
+}
+
+/* Responsive para notificaciones */
+@media (max-width: 600px) {
+    .home .notification-container {
+        right: 0.5rem;
+        left: auto;
+        top: 0.5rem;
+    }
+    .home .notification,
+    .home .notification-mini {
+        min-width: 70vw;
+        max-width: 90vw;
+        font-size: 0.89rem;
+        padding: 0.4em 0.7em 0.4em 0.5em;
+    }
+    .home .notification-icon {
+        width: 1em;
+        height: 1em;
+    }
+}
+
+/* --- Add Instance Popup --- */
+.add-instance-popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;   
+    height: 100vh;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    transition: opacity 0.2s;
+}
+.add-instance-popup.show {
+    display: flex;
+}
+.add-instance-popup-inner {
+    background: #23272a !important;
+    border-radius: 12px !important;
+    padding: 1.2rem 1.2rem 1rem 1.2rem !important;
+    min-width: 220px !important;
+    max-width: 90vw !important;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    border: none !important;
+}
+.add-instance-title {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    margin-bottom: 0.5rem !important;
+    text-align: center !important;
+}
+.add-instance-warning {
+    display: none !important;
+}
+.add-instance-input {
+    width: 100% !important;
+    padding: 0.5em 1em !important;
+    font-size: 1rem !important;
+    border-radius: 6px !important;
+    border: none !important;
+    background: #2c2f33 !important;
+    color: #fff !important;
+    margin-bottom: 1rem !important;
+    outline: none !important;
+}
+.add-instance-actions {
+    display: flex !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    justify-content: flex-end !important;
+}
+.add-instance-confirm, .add-instance-cancel {
+    min-width: 80px !important;
+    padding: 0.4em 1em !important;
+    font-size: 1rem !important;
+    border-radius: 6px !important;
+    border: none !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background 0.18s, color 0.18s !important;
+    outline: none !important;
+}
+.add-instance-confirm {
+    background: #00e676 !important;
+    color: #23272a !important;
+}
+.add-instance-confirm:hover, .add-instance-confirm:focus {
+    background: #43e66c !important;
+    color: #222 !important;
+}
+.add-instance-cancel {
+    background: transparent !important;
+    color: #fff !important;
+}
+.add-instance-cancel:hover, .add-instance-cancel:focus {
+    background: #ff4040 !important;
+    color: #fff !important;
+}
+
+/* Botón sidebar Agregar Instancia igual que .action-button */
+.add-instance-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 1rem;
+    height: 3.1rem;
+    width: 3.1rem;
+    cursor: pointer;
+    background: rgba(0, 146, 230, 0.062); /* igual que .icon-speaker-on/off */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(5px);
+    margin: 1.5rem 0;
+    transition: background 0.2s, border 0.2s, transform 0.2s;
+}
+.add-instance-btn:hover {
+    background: var(--box-button-hover-2);
+    transform: scale(1.05);
+}
+.add-instance-btn img {
+    filter: invert(1) brightness(2);
+}
+
+/* Nuevo: grid de instancias en sidebar2 */
+.sidebar2 .instances-grid {
+    padding-top: 0.5rem; /* deja espacio para el logo */
+    gap: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.6rem;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+/* Cada instancia como un botón cuadrado similar al action-button */
+.sidebar-instance {
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 20px;
+    background: rgba(0, 146, 230, 0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+.sidebar-instance:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    border-color: rgba(0,120,189,0.35);
+}
+
+/* portada pequeña */
+.sidebar-instance-cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.95) contrast(0.95);
+    transition: transform 0.18s ease;
+}
+
+/* nombre oculto (se puede mostrar con tooltip o al hover) */
+.sidebar-instance-name {
+    position: absolute;
+    bottom: -9999px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+/* marcar activo */
+.sidebar-instance.active-sidebar-instance {
+    outline: 2px solid rgba(75, 230, 167, 0.9);
+    box-shadow: 0 6px 18px rgba(75,230,167,0.12);
+}
+
+/* delete button para instancias locales */
+.local-instance-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: none;
+    background: rgba(255,64,64,0.95);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 3;
+}
+
+/* Preview al pasar el mouse: ahora un cartel pequeño con el nombre de la instancia */
+.instance-preview {
+    position: fixed;
+    z-index: 99999;
+    min-width: 140px;
+    max-width: 320px;
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(10,10,12,0.96), rgba(20,20,22,0.96));
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms ease;
+    opacity: 0;
+    transform: translateY(6px) scale(0.995);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* eliminar regla para img dentro (ya no se usa pero lo dejamos por compat) */
+.instance-preview img {
+    display: none;
+}
+
+/* pequeño pulso al aparecer */
+.instance-preview.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 900px) {
+    .instance-preview { min-width: 110px; font-size: 0.9rem; padding: 8px 10px; }
+}
+
+/* Instance menu overlay (blur) */
+.instance-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 120000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    -webkit-backdrop-filter: blur(6px) saturate(1.02);
+    backdrop-filter: blur(6px) saturate(1.02);
+}
+
+/* estados de animación aplicados por JS */
+.instance-menu-overlay.anim-in { animation: overlay-fade-in 300ms cubic-bezier(.2,.9,.25,1) forwards; }
+.instance-menu-overlay.anim-out { animation: overlay-fade-out 260ms cubic-bezier(.4,.0,.2,1) forwards; }
+
+/* caja principal: amplia, con padding y grid interno */
+.instance-menu {
+    position: relative;
+    width: min(1200px, 92vw);
+    height: min(820px, 88vh);
+    background: linear-gradient(180deg, rgba(28,28,30,0.96), rgba(18,18,20,0.96));
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform-origin: center center;
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+    z-index: 120010; /* por encima del backdrop */
+}
+
+/* animación de la caja (abrir/cerrar) */
+.instance-menu-overlay.anim-in .instance-menu {
+    animation: menu-pop-in 360ms cubic-bezier(.2,.9,.25,1) forwards;
+}
+.instance-menu-overlay.anim-out .instance-menu {
+    animation: menu-pop-out 260ms cubic-bezier(.4,.0,.2,1) forwards;
+}
+
+/* Header mantiene estilo */
+.instance-menu-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Grid de tiles: grandes cuadrados/rectángulos ordenados */
+.instance-menu-list {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* tiles responsivos */
+    gap: 14px;
+    padding: 12px;
+    align-content: start;
+    overflow: auto;
+    scroll-behavior: smooth;
+}
+
+/* Tile (cuadrado/rectángulo grande, minimalista) */
+.instance-menu-item {
+    display:flex;
+    flex-direction: column;
+    gap:8px;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 220ms cubic-bezier(.2,.9,.25,1), box-shadow 220ms, background 220ms;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.03);
+    min-height: 120px; /* aspecto más rectangular */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.36);
+    will-change: transform, box-shadow, opacity;
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+/* tile hover */
+.instance-menu-item:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.015));
+}
+
+/* cover grande dentro del tile */
+.item-cover {
+    width: 100%;
+    height: 92px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 2px 12px rgba(0,0,0,0.45);
+}
+
+/* texto dentro del tile */
+.item-name { font-size: 1rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.item-sub { font-size: 0.82rem; color:#bdbdbd; }
+
+/* animación de aparición escalonada: cuando overlay tiene clase open, animar tiles con delay CSS variable */
+.instance-menu.opened .instance-menu-item { /* fallback no usado por JS, kept for clarity */ }
+
+/* JS añade 'open' en overlay; para stagger usamos selector que aplica anim cuando overlay tiene anim-in */
+.instance-menu-overlay.anim-in .instance-menu-item {
+    animation: tile-in 420ms cubic-bezier(.2,.9,.25,1) forwards;
+    /* stagger mediante delay calculado con nth-child */
+}
+.instance-menu-list .instance-menu-item:nth-child(1)  { animation-delay: 0ms; }
+.instance-menu-list .instance-menu-item:nth-child(2)  { animation-delay: 25ms; }
+.instance-menu-list .instance-menu-item:nth-child(3)  { animation-delay: 50ms; }
+.instance-menu-list .instance-menu-item:nth-child(4)  { animation-delay: 75ms; }
+.instance-menu-list .instance-menu-item:nth-child(5)  { animation-delay: 100ms; }
+.instance-menu-list .instance-menu-item:nth-child(6)  { animation-delay: 125ms; }
+.instance-menu-list .instance-menu-item:nth-child(7)  { animation-delay: 150ms; }
+.instance-menu-list .instance-menu-item:nth-child(8)  { animation-delay: 175ms; }
+.instance-menu-list .instance-menu-item:nth-child(9)  { animation-delay: 200ms; }
+.instance-menu-list .instance-menu-item:nth-child(10) { animation-delay: 225ms; }
+
+/* cerrar: tiles desaparecen suavemente */
+.instance-menu-overlay.anim-out .instance-menu-item {
+    animation: tile-out 220ms cubic-bezier(.4,.0,.2,1) forwards;
+}
+
+/* preview style: ligeramente translúcido y discreto */
+.instance-menu-preview {
+    display: none; /* mostrado por JS */
+    position: fixed;
+    z-index: 120010;
+    min-width: 220px;
+    max-width: 360px;
+    background: linear-gradient(180deg, rgba(22,22,24,0.98), rgba(12,12,14,0.98));
+    color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* preview internal layout */
+.instance-menu-preview .preview-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.instance-menu-preview .preview-thumb {
+    width: 92px;
+    height: 72px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 12px rgba(0,0,0,0.45);
+    flex: 0 0 auto;
+}
+.instance-menu-preview .preview-info { flex: 1 1 auto; min-width: 0; }
+.instance-menu-preview .preview-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.instance-menu-preview .preview-meta {
+    font-size: 0.85rem;
+    color: #cfcfcf;
+    margin-bottom: 4px;
+}
+.instance-menu-preview .preview-meta .meta-label {
+    opacity: 0.85;
+    color: #9ea7b3;
+    margin-right: 6px;
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+/* footer with status badge */
+.instance-menu-preview .preview-footer {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.preview-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+    background: rgba(255,255,255,0.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+.preview-status-badge.online {
+    background: linear-gradient(90deg,#12c24a,#4be6a7);
+    color: #072a12;
+}
+.preview-status-badge.offline {
+    background: linear-gradient(90deg,#ff6b6b,#ff9a9a);
+    color: #3a0707;
+}
+
+/* Backdrop: asegúrate que capture clics y oscurezca ligeramente */
+.instance-menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8,8,10,0.48);
+    -webkit-backdrop-filter: blur(6px) saturate(1.02);
+    backdrop-filter: blur(6px) saturate(1.02);
+    cursor: default;
+    z-index: 120000; /* detrás de la caja principal */
+}
+
+/* Close button: más visible, circular, accesible */
+.instance-menu-close {
+    appearance: none;
+    border: none;
+    background: rgba(255,255,255,0.02);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 140ms, transform 140ms, box-shadow 140ms;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    font-size: 14px;
+}
+.instance-menu-close:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+}
+.instance-menu-close .close-icon { display:inline-block; line-height:1; }
+
+/* When overlay open, ensure menu on top and backdrop visible */
+.instance-menu-overlay.open .instance-menu-backdrop { display:block; }
+.instance-menu-overlay.open .instance-menu { opacity:1; transform:none; }
+
+/* Forzar que los tiles sean visibles cuando el overlay está abierto */
+.instance-menu-overlay.open .instance-menu-item {
+	opacity: 1 !important;
+	transform: none !important;
+	animation: none !important;
+	transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, opacity 120ms ease;
+	pointer-events: auto;
+}
+
+/* También asegurar que la lista sea visible (por si hay reglas heredadas) */
+.instance-menu-overlay.open .instance-menu-list {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+
+/* Account preview (tooltip) */
+.account-preview {
+    position: fixed;
+    top: 10;
+    left: 20;
+    z-index: 120000;
+    pointer-events: none; /* no interferir con el cursor */
+    background: linear-gradient(180deg, rgba(30,30,30,0.98), rgba(18,18,20,0.98));
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.04);
+    min-width: 120px;
+    max-width: 260px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    opacity: 0;
+    transform: translateY(6px) scale(0.995);
+    transition: opacity 160ms ease, transform 160ms ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Visible state */
+.account-preview.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Small responsive tweak */
+@media (max-width: 480px) {
+    .account-preview { font-size: 0.85rem; min-width: 100px; max-width: 180px; }
+}
+
+/* Efecto sutil al cambiar de instancia: pulso sobre el fondo (solo visual) */
+@keyframes instance-bg-pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(0,150,255,0);
+		filter: none;
+	}
+	18% {
+		box-shadow: 0 22px 48px rgba(0,150,255,0.12);
+		filter: blur(0.6px) saturate(1.02);
+	}
+	45% {
+		box-shadow: 0 34px 72px rgba(0,150,255,0.08);
+		filter: blur(1.2px) saturate(1.03);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(0,150,255,0);
+		filter: none;
+	}
+}
+
+/* Clase que activa la animación: añadir/retirar desde JS en .home */
+.home.instance-changing {
+	animation: instance-bg-pulse 700ms ease-out 1;
+	/* evitar afectar layout; el pulso es puramente visual */
+	will-change: box-shadow, filter;
+	/* ligera transición por si se aplica/remueve sin animación de keyframes */
+	transition: box-shadow 320ms ease-out, filter 320ms ease-out;
+}
+
+/* Defensa: ocultar elementos de menú marcados explícitamente como privados.
+   El filtrado principal se hace desde JS; esta regla evita que algún caso accidental sea visible. */
+.instance-menu-item[data-whitelist="private"] {
+    display: none !important;
+}
+
+/* Eliminar uso del botón grande con mascota; en su lugar estilo compacto para el botón lateral de refresco */
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 1rem;
+    height: 3.2rem;
+    width: 3.2rem;
+    cursor: pointer;
+    background: rgba(0, 146, 230, 0.062);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(5px);
+    margin: 1.5rem 0;
+    transition: background 0.2s, border 0.2s, transform 0.2s;
+}
+.refresh-btn:hover {
+    background: var(--box-button-hover-2);
+    transform: scale(1.05);
+}
+.refresh-btn:focus {
+    filter: invert(1) brightness(2);
+}
+
+/* pequeño icono SVG dentro del botón */
+.refresh-btn .icon-refresh {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    display: block;
+    pointer-events: none;
+}
+
+/* Si todavía existiera la regla antigua para .refresh-launcher-btn la desactivamos para evitar conflictos */
+.refresh-launcher-btn { display: none !important; }

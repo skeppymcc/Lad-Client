@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+        <link rel="stylesheet" href="assets/css/launcher.css">
+    </head>
+    <body>
+        <div class="dragbar">
+            <div class="window-controls" role="toolbar" aria-label="Controles ventana">
+                <button id="minimize" class="window-btn window-btn-minimize" aria-label="Minimizar"></button>
+                <button id="close" class="window-btn window-btn-close" aria-label="Cerrar"></button>
+            </div>
+            <div class="dragbar-title">Lad Client</div>
+        </div>
+
+        <div class="preload-content">
+            <div class="preload-progress">
+                <span class="dot"></span>
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <div class="preload-title">Cargando...</div>
+        </div>
+
+        <div class="popup">
+            <div class="popup-tab">
+                <div class="popup-title"></div>
+                <div class="popup-content"></div>
+                <div class="popup-options">
+                    <button class="popup-button">OK</button>
+                </div>
+            </div>
+        </div>
+        <div class="panels"></div>
+        <script src="assets/js/launcher.js" type="module"></script>
+    </body>
+</html>
