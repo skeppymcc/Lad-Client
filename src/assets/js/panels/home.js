@@ -1326,7 +1326,7 @@ class Home {
                     this.playTimerId = null;
                 }
                 if (configClient.launcher_config.closeLauncher == 'close-launcher') {
-                    ipcRenderer.send("main-window.show");
+                    ipcRenderer.send('main-window-show');
                 }
                 ipcRenderer.send('main-window-progress-reset');
                 if (infoStartingBOX) infoStartingBOX.style.display = "none";
