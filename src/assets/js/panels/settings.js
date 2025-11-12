@@ -42,12 +42,43 @@ class Settings {
     }
 
     navBTN() {
-        document.querySelector('.nav-box').addEventListener('click', e => {
-            if (e.target.classList.contains('nav-settings-btn')) {
-                let id = e.target.id
+        // Inicialización: transformar los botones de texto en botones con icono + texto accesible
+        const navButtons = document.querySelectorAll('.nav-settings-btn');
+        navButtons.forEach(btn => {
+            // guardar label original
+            const label = (btn.textContent || btn.innerText || '').trim();
+            // si ya transformado, saltar
+            if (btn.querySelector('.nav-icon')) {
+                btn.setAttribute('aria-label', label || btn.id);
+                btn.setAttribute('role', 'button');
+                btn.setAttribute('tabindex', '0');
+                return;
+            }
+            // sustituir contenido por icon + hidden text (mantener accesibilidad)
+            btn.innerHTML = `<span class="nav-icon" aria-hidden="true"></span><span class="nav-text">${label}</span>`;
+            btn.setAttribute('aria-label', label || btn.id);
+            btn.setAttribute('role', 'button');
+            btn.setAttribute('tabindex', '0');
 
-                let activeSettingsBTN = document.querySelector('.active-settings-BTN')
-                let activeContainerSettings = document.querySelector('.active-container-settings')
+            // Allow keyboard activation (Enter / Space)
+            btn.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    btn.click();
+                }
+            });
+        });
+
+        // Delegated click handler: mantiene la lógica previa
+        document.querySelector('.nav-box').addEventListener('click', e => {
+            // Normalize target (may be the inner span)
+            let target = e.target.closest('.nav-settings-btn');
+            if (!target) return;
+            if (target.classList.contains('nav-settings-btn')) {
+                let id = target.id;
+
+                let activeSettingsBTN = document.querySelector('.active-settings-BTN');
+                let activeContainerSettings = document.querySelector('.active-container-settings');
 
                 if (id == 'save') {
                     if (activeSettingsBTN) activeSettingsBTN.classList.toggle('active-settings-BTN');
@@ -59,12 +90,12 @@ class Settings {
                 }
 
                 if (activeSettingsBTN) activeSettingsBTN.classList.toggle('active-settings-BTN');
-                e.target.classList.add('active-settings-BTN');
+                target.classList.add('active-settings-BTN');
 
                 if (activeContainerSettings) activeContainerSettings.classList.toggle('active-container-settings');
                 document.querySelector(`#${id}-tab`).classList.add('active-container-settings');
             }
-        })
+        });
     }
 
     accounts() {
@@ -457,20 +488,6 @@ class Settings {
             })
         }
 
-        // --- Modo Streamer ---
-        let streamerSwitch = document.querySelector('.streamer-mode-switch');
-        if (streamerSwitch) {
-            streamerSwitch.checked = !!configClient?.launcher_config?.streamer_mode;
-            streamerSwitch.addEventListener('change', async () => {
-                let configClient = await this.db.readData('configClient');
-                configClient.launcher_config.streamer_mode = streamerSwitch.checked;
-                await this.db.updateData('configClient', configClient);
-                window.applyStreamerMode(streamerSwitch.checked);
-            });
-            // Aplica el modo al cargar settings
-            window.applyStreamerMode(streamerSwitch.checked);
-        }
-
         // --- Discord Rich Presence ---
         const discordSwitch = document.querySelector('.discord-rpc-switch');
         if (discordSwitch) {
@@ -519,37 +536,4 @@ window.setHomeBackgroundMedia = function(url) {
     }
     // Guarda el último fondo para restaurar en settings si es necesario
     localStorage.setItem('lastInstanceBackground', url);
-}
-
-// --- Función global para aplicar modo streamer ---
-if (!window.applyStreamerMode) window.applyStreamerMode = function(enabled) {
-    if (enabled) {
-        document.body.classList.add('streamer-mode');
-        // Oculta info sensible en settings y home
-        document.querySelectorAll('.profile-pseudo, .profile-uuid, .account-select, .instance-name, .add-text-profile, .player-count, .server-status-name, .server-status-text, .session-info-value').forEach(el => {
-            if (el) el.textContent = 'Streamer';
-        });
-        document.querySelectorAll('.profile-image, .player-head').forEach(el => {
-            if (el) el.style.background = '#a78bfa';
-        });
-        document.querySelectorAll('.notification-message').forEach(el => {
-            if (el) el.textContent = 'Modo Streaming Activado';
-        });
-        document.querySelectorAll('.panel').forEach(panel => {
-            panel.style.background = '#7c3aed';
-            panel.style.color = '#fff';
-        });
-        let homePanel = document.querySelector('.home');
-        if (homePanel) homePanel.style.background = '#7c3aed';
-    } else {
-        document.body.classList.remove('streamer-mode');
-        // Restaura estilos y datos si se desactiva el modo streamer
-        document.querySelectorAll('.panel').forEach(panel => {
-            panel.style.background = '';
-            panel.style.color = '';
-        });
-        let homePanel = document.querySelector('.home');
-        if (homePanel) homePanel.style.background = '';
-        // No restauramos datos sensibles por seguridad, solo estilos visuales
-    }
 }

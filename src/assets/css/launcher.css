@@ -395,6 +395,82 @@ body.streamer-mode .player-head {
 .console-warn .m { color: #ffd88a; background: linear-gradient(90deg, rgba(255,216,138,0.03), transparent); }
 .console-error .m { color: #ff9b9b; background: linear-gradient(90deg, rgba(255,155,155,0.03), transparent); }
 
+/* Notificaciones: fuera del flujo para no romper el layout al lanzar el juego */
+.notification-container {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 16000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: none; /* deja que clicks pasen salvo en botones dentro de la notificación */
+    max-width: 360px;
+    width: auto;
+    padding: 0;
+}
+
+/* Notificación individual */
+.notification {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(180deg, rgba(22,22,22,0.95), rgba(10,10,10,0.88));
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.03);
+    min-width: 180px;
+    max-width: 360px;
+    font-size: 0.95rem;
+    overflow: hidden;
+}
+
+/* Icon wrapper pequeño */
+.notification-icon-wrapper { display:flex; align-items:center; justify-content:center; width:28px; height:28px; flex: 0 0 28px; }
+
+/* Mensaje flexible */
+.notification-message { flex: 1 1 auto; word-break: break-word; }
+
+/* Botón cerrar dentro de la notificación */
+.notification-close {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+/* Tipos */
+.notification-success { border-left: 4px solid #2ecc71; }
+.notification-info { border-left: 4px solid #3498db; }
+.notification-error { border-left: 4px solid #e74c3c; }
+.notification-warn { border-left: 4px solid #f1c40f; }
+
+/* Tamaño compacto (usado por el sistema) */
+.notification-mini { font-size: 0.9rem; padding: 7px 10px; }
+
+/* Animaciones de entrada/salida */
+.notification-animate-in { animation: notif-in 220ms cubic-bezier(.2,.9,.2,1) both; }
+.notification-animate-out { animation: notif-out 220ms cubic-bezier(.2,.9,.2,1) forwards; }
+
+@keyframes notif-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.995); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes notif-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(8px) scale(0.99); }
+}
+
+/* Asegura que el contenedor por defecto en panels/home.html no interfiera */
+.panels .notification-container { pointer-events: none; }
+
 /* small responsive */
 @media (max-width: 900px) {
     .custom-console-shell { min-width: 320px; max-width: 94vw; }

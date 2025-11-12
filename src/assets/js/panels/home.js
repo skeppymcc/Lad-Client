@@ -147,6 +147,9 @@ class Home {
         // Nueva bandera: true mientras se está iniciando/ejecutando una instancia
         this.launching = false;
 
+        // Nuevo: evitar notificaciones repetidas de "Minecraft iniciado"
+        this._notifiedGameStarted = false;
+
         // Nuevo: control del contador de minutos jugados
         this.playTimerId = null;
         this.playedMinutes = parseInt(localStorage.getItem('playedMinutes') || '0', 10) || 0;
@@ -1220,6 +1223,9 @@ class Home {
                 }
             };
 
+            // Asegúrate de resetear la bandera antes de iniciar una nueva sesión
+            this._notifiedGameStarted = false;
+
             launch.Launch(opt);
 
             // Iniciar contador: suma 1 minuto cada 60s mientras la instancia esté en ejecución
@@ -1312,7 +1318,13 @@ class Home {
                  new logger('Minecraft', '#36b030');
                  ipcRenderer.send('main-window-progress-load');
                  if (infoStarting) infoStarting.innerHTML = `Playing`;
-                 window.notify({ message: "Minecraft iniciado.", type: "success" });
+
+                 // Evitar notificaciones repetidas: notificar solo la primera vez que recibimos 'data'
+                 if (!this._notifiedGameStarted) {
+                     this._notifiedGameStarted = true;
+                     window.notify({ message: "Minecraft iniciado.", type: "success" });
+                 }
+
                  console.log(e);
                  // Nota: mantenemos this.launching = true hasta que el proceso cierre.
              });
@@ -1320,6 +1332,8 @@ class Home {
             launch.on('close', code => {
                 // Reset bandera al cerrar el juego
                 this.launching = false;
+                // Reiniciar bandera para futuras ejecuciones
+                this._notifiedGameStarted = false;
                 // Detener timer de minutos jugados
                 if (this.playTimerId) {
                     clearInterval(this.playTimerId);
@@ -1341,6 +1355,7 @@ class Home {
             launch.on('error', err => {
                 // Reset bandera en error
                 this.launching = false;
+                this._notifiedGameStarted = false;
                 // Detener timer si hay error
                 if (this.playTimerId) {
                     clearInterval(this.playTimerId);
@@ -1354,6 +1369,7 @@ class Home {
         } catch (err) {
             // Reset bandera si hay excepción
             this.launching = false;
+            this._notifiedGameStarted = false;
             if (this.playTimerId) {
                 clearInterval(this.playTimerId);
                 this.playTimerId = null;

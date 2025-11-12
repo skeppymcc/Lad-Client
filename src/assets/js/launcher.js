@@ -210,14 +210,47 @@ class Launcher {
                 btnMinimize.addEventListener('click', () => {
                     ipcRenderer.send('main-window-minimize');
                 });
-                btnMinimize.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ipcRenderer.send('main-window-minimize'); }});
+                btnMinimize.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ipcRenderer.send('main-window-minimize'); }}); 
             }
 
             if (btnClose) {
+                // Mostrar popup de cierre durante 3s antes de cerrar (para que el usuario lo vea)
                 btnClose.addEventListener('click', () => {
-                    ipcRenderer.send('main-window-close');
+                    try {
+                        const p = new popup();
+                        p.openPopup({
+                            title: 'Cerrando...',
+                            content: 'Saliendo del launcher. Se cerrará en unos segundos...',
+                            color: 'var(--color)',
+                            background: false
+                        });
+                        setTimeout(() => {
+                            ipcRenderer.send('main-window-close');
+                        }, 3000);
+                    } catch (err) {
+                        // fallback: si algo falla, cerrar inmediatamente
+                        ipcRenderer.send('main-window-close');
+                    }
                 });
-                btnClose.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ipcRenderer.send('main-window-close'); }});
+                btnClose.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        try {
+                            const p = new popup();
+                            p.openPopup({
+                                title: 'Cerrando...',
+                                content: 'Saliendo del launcher. Se cerrará en unos segundos...',
+                                color: 'var(--color)',
+                                background: false
+                            });
+                            setTimeout(() => {
+                                ipcRenderer.send('main-window-close');
+                            }, 3000);
+                        } catch (err) {
+                            ipcRenderer.send('main-window-close');
+                        }
+                    }
+                });
             }
         } catch (e) {
             console.warn('initFrame - window controls bind failed', e);
