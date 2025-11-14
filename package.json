@@ -1,7 +1,7 @@
 {
     "name": "Lad-Client",
     "preductname": "Lad Client",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Cliente de LadStudios, hecho por NicoGominola y ImD4rken",
     "main": "src/app.js",
     "author": {

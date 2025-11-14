@@ -132,7 +132,7 @@ ipcMain.handle('update-app', async () => {
         }).catch(error => {
             reject({
                 error: true,
-                message: error
+                message: error.message || error.toString()
             })
         })
     })
@@ -162,6 +162,7 @@ autoUpdater.on('download-progress', (progress) => {
 })
 
 autoUpdater.on('error', (err) => {
+    console.error('Update error:', err);
     const updateWindow = UpdateWindow.getWindow();
-    if (updateWindow) updateWindow.webContents.send('error', err);
+    if (updateWindow) updateWindow.webContents.send('error', { message: 'No se pudo verificar actualizaciones' });
 });

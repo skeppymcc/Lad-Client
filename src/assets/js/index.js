@@ -52,7 +52,9 @@ class Splash {
         this.setStatus("Buscando actualizaciones...");
 
         ipcRenderer.invoke("update-app").catch(err => {
-            return this.shutdown(`Error al buscar actualizaciones:<br>${err.message}`);
+            console.error("Update check failed:", err);
+            this.setStatus("No se pudo verificar actualizaciones, continuando...");
+            setTimeout(() => this.maintenanceCheck(), 2000);
         });
 
         ipcRenderer.on("updateAvailable", () => {
@@ -66,7 +68,9 @@ class Splash {
         });
 
         ipcRenderer.on("error", (event, err) => {
-            if (err) return this.shutdown(err.message);
+            console.error("Update error received:", err);
+            this.setStatus("Error al descargar actualización, continuando...");
+            setTimeout(() => this.maintenanceCheck(), 2000);
         });
 
         ipcRenderer.on("download-progress", (event, progress) => {
